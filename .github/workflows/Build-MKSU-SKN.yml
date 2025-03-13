@@ -160,8 +160,7 @@ jobs:
           # Add VFS configuration settings
           if [[ "${{ github.event.inputs.VFS_patch_ENABLED }}" == 'enable' ]]; then
             echo "CONFIG_KSU_SUSFS_SUS_SU=n" >> ./common/arch/arm64/configs/gki_defconfig
-            echo "CONFIG_KSU_HOOK=y" >> ./common/arch/arm64/configs/gki_defconfig
-            echo "CONFIG_KSU_WITH_KPROBES=n" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_KSU_VFS=y" >> ./common/arch/arm64/configs/gki_defconfig
           else
             echo "CONFIG_KSU_SUSFS_SUS_SU=y" >> ./common/arch/arm64/configs/gki_defconfig
           fi
