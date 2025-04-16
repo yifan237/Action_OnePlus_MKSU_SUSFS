@@ -9,7 +9,7 @@ on:
       FEIL:
         description: "配置文件"
         required: true
-        default: 'oneplus_ace3_pro_v'
+        default: 'oneplus12_v'
       CPUD:
         description: "处理器代号"
         required: true
@@ -143,9 +143,9 @@ jobs:
           cp ../susfs4ksu/kernel_patches/include/linux/* ./common/include/linux/
 
           #lz4k
-          #cp -r ../SukiSU_patch/other/lz4k/include/linux/* ./common/include/linux
-          #cp -r ../SukiSU_patch/other/lz4k/lib/* ./common/lib
-          #cp -r ../SukiSU_patch/other/lz4k/crypto/* ./common/crypto
+          cp -r ../SukiSU_patch/other/lz4k/include/linux/* ./common/include/linux
+          cp -r ../SukiSU_patch/other/lz4k/lib/* ./common/lib
+          cp -r ../SukiSU_patch/other/lz4k/crypto/* ./common/crypto
           
           echo "正在给内核打susfs补丁"
           cd ./common
@@ -215,23 +215,26 @@ jobs:
           #  echo "CONFIG_ZRAM_DEF_COMP_LZ4KD=y" >> ./common/arch/arm64/configs/gki_defconfig
           #fi
 
-          #if [ "${{ github.event.inputs.KERNEL_VERSION }}" != "6.6" ] && [ "${{ github.event.inputs.KERNEL_VERSION }}" != "5.10" ]; then
-          #  sed -i 's/CONFIG_MODULE_SIG=y/CONFIG_MODULE_SIG=n/g' ./common/arch/arm64/configs/gki_defconfig
-          #  sed -i 's/CONFIG_ZSMALLOC=m/CONFIG_ZSMALLOC=y/g' ./common/arch/arm64/configs/gki_defconfig
-          #  sed -i 's/CONFIG_ZRAM=m/CONFIG_ZRAM=y/g' ./common/arch/arm64/configs/gki_defconfig
-          #fi
+          if [ "${{ github.event.inputs.KERNEL_VERSION }}" != "6.6" ] && [ "${{ github.event.inputs.KERNEL_VERSION }}" != "5.10" ]; then
+            sed -i 's/CONFIG_MODULE_SIG=y/CONFIG_MODULE_SIG=n/g' ./common/arch/arm64/configs/gki_defconfig
+            sed -i 's/CONFIG_ZSMALLOC=m/CONFIG_ZSMALLOC=y/g' ./common/arch/arm64/configs/gki_defconfig
+            sed -i 's/CONFIG_ZRAM=m/CONFIG_ZRAM=y/g' ./common/arch/arm64/configs/gki_defconfig
+          fi
 
           #if [ "${{ github.event.inputs.KERNEL_VERSION }}" = "6.6" ]; then
           #  echo "CONFIG_ZSMALLOC=y" >> ./common/arch/arm64/configs/gki_defconfig
           #  sed -i 's/CONFIG_ZRAM=m/CONFIG_ZRAM=y/g' ./common/arch/arm64/configs/gki_defconfig
           #fi
 
-          #if grep -q "CONFIG_ZSMALLOC=y" ./common/arch/arm64/configs/gki_defconfig && grep -q "CONFIG_ZRAM=y" ./common/arch/arm64/configs/gki_defconfig; then
-          #  echo "CONFIG_CRYPTO_LZ4HC=y" >> ./common/arch/arm64/configs/gki_defconfig
-          #  echo "CONFIG_CRYPTO_LZ4K=y" >> ./common/arch/arm64/configs/gki_defconfig
-          #  echo "CONFIG_CRYPTO_LZ4KD=y" >> ./common/arch/arm64/configs/gki_defconfig
-          #  echo "CONFIG_CRYPTO_842=y" >> ./common/arch/arm64/configs/gki_defconfig
-          #fi
+          if grep -q "CONFIG_ZSMALLOC=y" ./common/arch/arm64/configs/gki_defconfig && grep -q "CONFIG_ZRAM=y" ./common/arch/arm64/configs/gki_defconfig; then
+            echo "CONFIG_CRYPTO_LZ4HC=y" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_CRYPTO_LZ4K=y" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_CRYPTO_LZ4KD=y" >> ./common/arch/arm64/configs/gki_defconfig
+            echo "CONFIG_CRYPTO_842=y" >> ./common/arch/arm64/configs/gki_defconfig
+          fi
+
+          echo "CONFIG_CPU_FREQ_GOV_USERSPACE=y" >> ./common/arch/arm64/configs/gki_defconfig
+          echo "CONFIG_CPU_FREQ_GOV_ONDEMAND=y" >> ./common/arch/arm64/configs/gki_defconfig
           
           # Remove check_defconfig
           sed -i 's/check_defconfig//' ./common/build.config.gki
