@@ -169,8 +169,8 @@ jobs:
           patch -p1 -F 3 < syscall_hooks.patch
           echo "完成"
 
-          #  cp ../../SukiSU_patch/other/lz4k_patch/${{ github.event.inputs.KERNEL_VERSION }}/lz4kd.patch ./
-          #  patch -p1 -F 3 < lz4kd.patch || true
+          cp ../../SukiSU_patch/other/lz4k_patch/${{ github.event.inputs.KERNEL_VERSION }}/lz4kd.patch ./
+          patch -p1 -F 3 < lz4kd.patch || true
 
       - name: Add SUSFS Configuration Settings
         run: |
@@ -209,7 +209,7 @@ jobs:
 
           #if [ "${{ github.event.inputs.KERNEL_VERSION }}" = "5.10" ]; then
           echo "CONFIG_ZSMALLOC=y" >> ./common/arch/arm64/configs/gki_defconfig
-          #  echo "CONFIG_ZRAM=y" >> ./common/arch/arm64/configs/gki_defconfig
+          echo "CONFIG_ZRAM=y" >> ./common/arch/arm64/configs/gki_defconfig
           #  echo "CONFIG_MODULE_SIG=n" >> ./common/arch/arm64/configs/gki_defconfig
           #  echo "CONFIG_CRYPTO_LZO=y" >> ./common/arch/arm64/configs/gki_defconfig
           #  echo "CONFIG_ZRAM_DEF_COMP_LZ4KD=y" >> ./common/arch/arm64/configs/gki_defconfig
